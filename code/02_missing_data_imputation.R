@@ -14,11 +14,6 @@ not <- names(PWASL %>% dplyr::select(-patient, -sex, -age, -education,
                                      -ScreeLing_2_sem, -ScreeLing_2_fon, -ScreeLing_2_synt, -ANTAT_2_A, 
                                      -ScreeLing_3_sem, -ScreeLing_3_fon, -ScreeLing_3_synt, -ANTAT_3_A)) 
 
-# PWASL <- PWASL %>% mutate(education = as.numeric(education), ScreeLing_1_sem = as.numeric(ScreeLing_1_sem), ScreeLing_1_synt = as.numeric(ScreeLing_1_synt),
-#                  ScreeLing_t2t1_sem = as.numeric(ScreeLing_t2t1_sem), ScreeLing_t2t1_synt = as.numeric(ScreeLing_t2t1_synt), 
-#                  ScreeLing_t3t1_sem = as.numeric(ScreeLing_t3t1_sem), ScreeLing_t3t1_synt = as.numeric(ScreeLing_t3t1_synt),
-#                  ANTAT_1_dpo = as.numeric(ANTAT_1_dpo), ScreeLing_1_dpo = as.numeric(ScreeLing_1_dpo))
-
 # Visualize missing data pattern
 
 missing_pattern_plot <- aggr(PWASL_miss, col = c('skyblue', 'red'),

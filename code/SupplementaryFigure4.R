@@ -10,7 +10,7 @@ data<-data.frame(X_resid, Y_resid)
 
 hccor <- ggplot(data, aes(x=X_resid, y=Y_resid)) +
   geom_point(size=3, color = cbbPalette[7]) +
-  labs(x="volume of the left hippocampus (mm?)", y = "residual long-term language outcome")+
+  labs(x="volume of the left hippocampus (mm³)", y = "residual long-term language outcome")+
   theme_classic() + 
   geom_smooth(method=lm, size=1, color = cbbPalette[7]) 
 

@@ -23,7 +23,7 @@ cutoff <- data.frame(Assessment = as.factor(c("ANELT (range 10-50)", "ScreeLing 
 Individual_evolution_linechart <- PWASL_long %>%
   filter(!(is.na(score))) %>%
   group_by(Time, Assessment) %>%
-  summarize(mean_score = mean(score), sd_score = sd(score)) %>% 
+  dplyr::summarize(mean_score = mean(score), sd_score = sd(score)) %>% 
   ggplot(mapping = aes(x = as.numeric(as.character(Time)), y = score, color = Assessment)) + #Time needs to be 1, 2, 3 (instead of characters) in order to draw the lines
   geom_path(data = PWASL_long, aes(group = patient), alpha = .2) +
   geom_line(aes(y = mean_score, color = Assessment), size = 1.5, alpha = .8) +
@@ -32,12 +32,12 @@ Individual_evolution_linechart <- PWASL_long %>%
   geom_point(data = PWASL_long, size = 1.5) + 
   theme_classic() + 
   labs(x = "Time", y = "Language outcome") + 
-  scale_colour_manual(values = cbbPalette[c(4,7)]) +
+  scale_colour_manual(values = c("#bdbdbd", "#636363")) +
   scale_x_discrete(limits = c("acute", "subacute", "chronic")) +
   facet_grid(. ~ Assessment) + 
   geom_hline(data = cutoff, aes(yintercept = cutoff), color = cbbPalette[1], size = 0.7, linetype="dashed") +
   theme(legend.position="none")
 
-tiff(here("figs", "Supplementary_Figure2.tiff"), units="mm", width=200, height=150, res=600, compression="lzw")
+tiff(here("figs", "Supplementary_Figure2.tiff"), units="mm", width=130, height=130, res=600, compression="lzw")
 Individual_evolution_linechart
 dev.off()

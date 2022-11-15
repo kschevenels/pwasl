@@ -2,6 +2,28 @@
 
 source(here::here("code","01_load_data.R"))
 
+# Compare gender distribution between patients with aphasia and healthy older controls
+
+gender = data.frame(HASL = as.numeric(summary(HASL$gender)),
+                    PWASL = as.numeric(summary(PWASL$sex)))
+
+sex <- chisq.test(gender, correct = T) #use the correction when at least one cell has a count <10 # significant
+prop.test(gender$HASL, gender$HASL+gender$PWASL, correct = T) # significant
+
+# Compare age between patients with aphasia and healthy older controls
+
+shapiro.test(HASL$age) # not normally distributed
+shapiro.test(PWASL$age) # normally distributed
+
+age <- wilcox.test(HASL$age, PWASL$age)
+
+# Compare education between patients with aphasia and healthy older controls
+
+shapiro.test(HASL$education) # not normally distributed
+shapiro.test(PWASL$education) # normally distributed
+
+education <- wilcox.test(HASL$education, PWASL$education) # not significant
+
 # Auditory SL
 
 shapiro.test(PWASL$ASL) # not normally distributed

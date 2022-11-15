@@ -1,6 +1,6 @@
 # Description
 
-This repository contains data and code to reproduce the findings reported in:  Schevenels, K., Michiels, L., Lemmens, R., De Smedt, B., Zink, I., Vandermosten, M. The role of the hippocampus in statistical learning and language recovery in persons with post stroke aphasia.
+This repository contains data and code to reproduce the findings reported in: Schevenels, K., Michiels, L., Lemmens, R., De Smedt, B., Zink, I., & Vandermosten, M. (2022). The role of the hippocampus in statistical learning and language recovery in persons with post stroke aphasia. NeuroImage: Clinical, 36(October), 103243. https://doi.org/10.1016/j.nicl.2022.103243
 
 Shield: [![CC BY 4.0][cc-by-shield]][cc-by]
 

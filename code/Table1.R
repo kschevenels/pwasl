@@ -28,7 +28,7 @@ patientchars <- PWASL %>%
                                        education ~ "Education (years)",
                                        stroke_type ~ "Stroke type (ischemia/hemorrhage)",
                                        stroke_laterality ~ "Stroke laterality (left/bilateral)",
-                                       stroke_history ~ "History of stroke (yes/no)",
+                                       stroke_history ~ "History of stroke (no/yes)",
                                        stroke_size ~ "Acute lesion volume (cc)", 
                                        old_lesion_load ~ "Old lesion load (cc)",
                                        ASL ~ "Subacute auditory SL score (/32)",
@@ -51,7 +51,7 @@ patientchars <- PWASL %>%
   mutate(N = ifelse(Variable == "__Handedness (right-handed/other)__", paste0(N,"/",33-as.numeric(N)),N)) %>%
   mutate(N = ifelse(Variable == "__Stroke type (ischemia/hemorrhage)__", paste0(N,"/",33-as.numeric(N)),N)) %>%
   mutate(N = ifelse(Variable == "__Stroke laterality (left/bilateral)__", paste0(N,"/",33-as.numeric(N)),N)) %>%
-  mutate(N = ifelse(Variable == "__History of stroke (yes/no)__", paste0(N,"/",33-as.numeric(N)),N)) %>%
+  mutate(N = ifelse(Variable == "__History of stroke (no/yes)__", paste0(33-as.numeric(N),"/",N),N)) %>%
   add_row(.after = 8, Variable = "ACM/ACP/Avert/Abas/AchorA/multifocal", N = "22/5/1/1/1/3", Median = "") %>%
   filter(!Variable %in% c("arteria cerebri media","arteria cerebri posterior","arteria vertebralis",
                           "arteria basilaris","anterior choroidal artery","multifocal")) %>%
@@ -69,7 +69,7 @@ patientchars <- PWASL %>%
                                               ifelse(Variable=="__Acute FBC right hippocampus (a.u.)__",2, NA)))))))))))))) %>%
   dplyr::rename(`N = 33`=2) %>%
   dplyr::rename(`Median (Range)`=3) %>%
-  dplyr::rename(`Missing values (N)` = Unknown) %>%
+  dplyr::rename(`NA` = Unknown) %>%
   mutate(Variable = recode_factor(Variable, "__Education (years)__" = "Education (years)",
                                   "__Age (years)__" = "Age (years)", 
                                   "__stroke_area__" = "Affected circulation area",
@@ -79,7 +79,7 @@ patientchars <- PWASL %>%
                                   "__Stroke laterality (left/bilateral)__" = "Stroke laterality (left/bilateral)", 
                                   "__Acute lesion volume (cc)__" = "Acute lesion volume (cm3)",
                                   "__Old lesion load (cc)__" = "Old lesion load (cm3)",
-                                  "__History of stroke (yes/no)__" = "History of stroke (yes/no)",
+                                  "__History of stroke (no/yes)__" = "History of stroke (no/yes)",
                                   "__Acute NIHSS total score__" = "Acute NIHSS total score",
                                   "__Acute volume left hippocampus (mm^3^)__" = "Acute volume left hippocampus (mm3)",
                                   "__Acute volume right hippocampus (mm^3^)__" = "Acute volume right hippocampus (mm3)",
@@ -108,11 +108,11 @@ table_patientchars <- flextable(patientchars) %>%
                       ref_symbols = "b") %>%
   flextable::footnote(part="body",
                       i=17,j=1,
-                      value=as_paragraph("as measured by the ScreeLing (Doesborgh et al., 2003)"),
+                      value=as_paragraph("as measured by the ScreeLing (Visch-Brink et al., 2010)"),
                       ref_symbols = "c") %>%
   flextable::footnote(part="body",
                       i=c(19,24),j=1,
-                      value=as_paragraph("as measured by the Amsterdam-Nijmegen Everyday Language Test, A-scale (Blomert et al., 1994)"),
+                      value=as_paragraph("as measured by the Amsterdam-Nijmegen Everyday Language Test, A-scale (Blomert et al., 1995)"),
                       ref_symbols = "d") %>%
   flextable::footnote(part="body",
                       i=23,j=1,

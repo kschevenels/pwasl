@@ -7,12 +7,12 @@ flowchart <- grViz("digraph flowchart {
       tab4 [label = '@@4']
       tab5 [label = '@@5'] 
       tab6 [label = '@@6']
-      tab7 [label = '@@7'] [color = red]
+      tab7 [label = '@@7'] [style = bold]
       tab8 [label = '@@8']
-      tab9 [label = '@@9'] [color = red]
+      tab9 [label = '@@9'] [style = bold]
       tab10 [label = '@@10'] 
-      tab11 [label = '@@11'] [color = red]
-      tab12 [label = '@@12'] [color = red]
+      tab11 [label = '@@11'] [style = bold]
+      tab12 [label = '@@12'] [style = bold]
       tab1 -> tab2;
       tab1 -> tab3; 
       tab3 -> tab4;

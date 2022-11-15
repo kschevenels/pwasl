@@ -9,7 +9,7 @@ var_label(PWASL$sex) <- "Sex"
 
 ## Predictive model for short-term language recovery 
 
-### Step 1: Traditional short-term model
+### Step 1: Original short-term model
 
 weighted_posterior_t2 <- lapply(PWASL_complete, function(dataset){
   model <- generalTestBF(ANTAT_2_A ~ ScreeLing_1_tot + stroke_size, data = dataset)
@@ -26,7 +26,7 @@ mod_basic_t2 <- lapply(PWASL_complete, function(dataset){
 
 BFincl_basic_t2 <- data.frame(do.call(rbind, mod_basic_t2), row.names = NULL) %>% dplyr::group_by(Predictor) %>% 
   summarise("BF inclusion" = qwraps2::mean_sd(BFincl, denote_sd = "paren")) %>%
-  mutate(Predictor = unlist(var_label(PWASL[Predictor]))) #summary dataframe
+  mutate(Predictor = unlist(var_label(PWASL[Predictor]))) # summary dataframe
 
 r2_t2 <- lapply(PWASL_complete, function(dataset){
   model <- generalTestBF(ANTAT_2_A ~ ScreeLing_1_tot + stroke_size, data = dataset)
@@ -43,9 +43,9 @@ save(weighted_posterior_t2, mod_basic_t2, BFincl_basic_t2, r2_t2, file = here("d
 
 predictors_noi_t2 = c("ANTAT_2_dpo", "old_lesion_load", "age", "sex", "education", "NIHSS_total", "NIHSS_language", "eTIV")
 
-mod_noi_t2 <- lapply(PWASL_complete, function(dataset){ #across the 10 datasets and predictors, calculate BF incl
-  lapply(predictors_noi_t2, function(predictor){ #loop across predictors
-    formula = as.formula(paste0("ANTAT_2_A ~ ScreeLing_1_tot + stroke_size + ", predictor)) #traditional model
+mod_noi_t2 <- lapply(PWASL_complete, function(dataset){ # across the 10 datasets and predictors, calculate BF incl
+  lapply(predictors_noi_t2, function(predictor){ # loop across predictors
+    formula = as.formula(paste0("ANTAT_2_A ~ ScreeLing_1_tot + stroke_size + ", predictor)) #original model
     data = dataset %>% drop_na(predictor)
     model <- generalTestBF(formula, data)
     bf <- bf_inclusion(model)
@@ -55,7 +55,7 @@ mod_noi_t2 <- lapply(PWASL_complete, function(dataset){ #across the 10 datasets 
   })
 })
 
-BFincl_noi_t2 <- data.frame() #get the mean and sd across the 10 datasets
+BFincl_noi_t2 <- data.frame() # get the mean and sd across the 10 datasets
 for (i in 1:length(predictors_noi_t2)){
   x <- data.frame(do.call(rbind, do.call(rbind, mod_noi_t2)[,i]), row.names = NULL) # ith element of each sublist
   y <- x %>% dplyr::group_by(Predictor) %>% summarise("BF inclusion" = qwraps2::mean_sd(BFincl, denote_sd = "paren"))
@@ -63,15 +63,15 @@ for (i in 1:length(predictors_noi_t2)){
 }
 
 BFincl_noi_t2 <- BFincl_noi_t2 %>% filter(!(Predictor %in% c("ScreeLing_1_tot", "stroke_size"))) %>%
-  mutate(Predictor = unlist(var_label(PWASL[Predictor]))) #summary dataframe
+  mutate(Predictor = unlist(var_label(PWASL[Predictor]))) # summary dataframe
 
 ### Step 3: Hippocampal predictors
 
 predictors_oi = c("volume_LHC", "volume_RHC", "CD_LHC", "CD_RHC")
 
-mod_coi_t2 <- lapply(PWASL_complete, function(dataset){ #across the 10 datasets and predictors, calculate BF incl
-  lapply(predictors_oi, function(predictor){ #loop across predictors
-    formula = as.formula(paste0("ANTAT_2_A ~ ScreeLing_1_tot + stroke_size + ", predictor)) # traditional model 
+mod_coi_t2 <- lapply(PWASL_complete, function(dataset){ # across the 10 datasets and predictors, calculate BF incl
+  lapply(predictors_oi, function(predictor){ # loop across predictors
+    formula = as.formula(paste0("ANTAT_2_A ~ ScreeLing_1_tot + stroke_size + ", predictor)) # original model 
     data = dataset %>% drop_na(predictor)
     model <- generalTestBF(formula, data)
     bf <- bf_inclusion(model)
@@ -81,17 +81,17 @@ mod_coi_t2 <- lapply(PWASL_complete, function(dataset){ #across the 10 datasets 
   })
 })
 
-BFincl_coi_t2 <- data.frame() #get the mean and sd across the 10 datasets
+BFincl_coi_t2 <- data.frame() # get the mean and sd across the 10 datasets
   for (i in 1:length(predictors_oi)){ 
-    x <- data.frame(do.call(rbind, do.call(rbind, mod_coi_t2)[,i]), row.names = NULL) #ith element of each sublist
+    x <- data.frame(do.call(rbind, do.call(rbind, mod_coi_t2)[,i]), row.names = NULL) # ith element of each sublist
     y <- x %>% dplyr::group_by(Predictor) %>% summarise("BF inclusion" = qwraps2::mean_sd(BFincl, denote_sd = "paren"))
     BFincl_coi_t2 <- rbind(BFincl_coi_t2, y)
   }
 
 BFincl_coi_t2 <- BFincl_coi_t2 %>% filter(!(Predictor %in% c("ScreeLing_1_tot", "stroke_size"))) %>%
-                 mutate(Predictor = unlist(var_label(PWASL[Predictor]))) #summary dataframe
+                 mutate(Predictor = unlist(var_label(PWASL[Predictor]))) # summary dataframe
 
-### Final short-term model (idem to traditional model)
+### Final short-term model (idem to original model)
 
 bf_inclusion_t2 <- lapply(PWASL_complete, function(dataset){
   model <- generalTestBF(ANTAT_2_A ~ ScreeLing_1_tot + stroke_size, data = dataset)
@@ -102,7 +102,7 @@ save(mod_noi_t2, BFincl_noi_t2, mod_coi_t2, BFincl_coi_t2, bf_inclusion_t2, file
 
 ## Predictive model for long-term language recovery 
 
-### Step 1: Traditional long-term model 
+### Step 1: Original long-term model 
 
 basic_weighted_posterior_t3 <- lapply(PWASL_complete, function(dataset){
   model <- generalTestBF(ANTAT_3_A ~ ScreeLing_1_tot + stroke_size, data = dataset)
@@ -119,7 +119,7 @@ mod_basic_t3 <- lapply(PWASL_complete, function(dataset){
 
 BFincl_basic_t3 <- data.frame(do.call(rbind, mod_basic_t3), row.names = NULL) %>% dplyr::group_by(Predictor) %>% 
   summarise("BF inclusion" = qwraps2::mean_sd(BFincl, denote_sd = "paren")) %>%
-  mutate(Predictor = unlist(var_label(PWASL[Predictor]))) #summary dataframe
+  mutate(Predictor = unlist(var_label(PWASL[Predictor]))) # summary dataframe
 
 basic_r2_t3 <- lapply(PWASL_complete, function(dataset){
   model <- generalTestBF(ANTAT_3_A ~ ScreeLing_1_tot + stroke_size, data = dataset)
@@ -136,9 +136,9 @@ save(basic_weighted_posterior_t3, mod_basic_t3, BFincl_basic_t3, basic_r2_t3, fi
 
 predictors_noi_t3 = c("ANTAT_3_dpo", "old_lesion_load", "age", "sex", "education", "NIHSS_total", "NIHSS_language", "eTIV")
 
-mod_noi_t3 <- lapply(PWASL_complete, function(dataset){ #across the 10 datasets and predictors, calculate BF incl
-  lapply(predictors_noi_t3, function(predictor){ #loop across predictors
-    formula = as.formula(paste0("ANTAT_3_A ~ ScreeLing_1_tot + stroke_size +", predictor)) #traditional model
+mod_noi_t3 <- lapply(PWASL_complete, function(dataset){ # across the 10 datasets and predictors, calculate BF incl
+  lapply(predictors_noi_t3, function(predictor){ # loop across predictors
+    formula = as.formula(paste0("ANTAT_3_A ~ ScreeLing_1_tot + stroke_size +", predictor)) # original model
     data = dataset %>% drop_na(predictor)
     model <- generalTestBF(formula, data)
     bf <- bf_inclusion(model)
@@ -148,21 +148,21 @@ mod_noi_t3 <- lapply(PWASL_complete, function(dataset){ #across the 10 datasets 
   })
 })
 
-BFincl_noi_t3 <- data.frame() #get the mean and sd across the 10 datasets
+BFincl_noi_t3 <- data.frame() # get the mean and sd across the 10 datasets
 for (i in 1:length(predictors_noi_t3)){ 
-  x <- data.frame(do.call(rbind, do.call(rbind, mod_noi_t3)[,i]), row.names = NULL) #ith element of each sublist
+  x <- data.frame(do.call(rbind, do.call(rbind, mod_noi_t3)[,i]), row.names = NULL) # ith element of each sublist
   y <- x %>% dplyr::group_by(Predictor) %>% summarise("BF inclusion" = qwraps2::mean_sd(BFincl, denote_sd = "paren"))
   BFincl_noi_t3 <- rbind(BFincl_noi_t3, y)
 }
 
 BFincl_noi_t3 <- BFincl_noi_t3 %>% filter(!(Predictor %in% c("ScreeLing_1_tot", "stroke_size"))) %>%
-  mutate(Predictor = unlist(var_label(PWASL[Predictor]))) #summary dataframe
+  mutate(Predictor = unlist(var_label(PWASL[Predictor]))) # summary dataframe
 
 ### Step 3: Hippocampal predictors
 
-mod_coi_t3 <- lapply(PWASL_complete, function(dataset){ #across the 10 datasets and predictors, calculate BF incl
-  lapply(predictors_oi, function(predictor){ #loop across predictors
-    formula = as.formula(paste0("ANTAT_3_A ~ ScreeLing_1_tot + stroke_size +", predictor)) #traditional model 
+mod_coi_t3 <- lapply(PWASL_complete, function(dataset){ # across the 10 datasets and predictors, calculate BF incl
+  lapply(predictors_oi, function(predictor){ # loop across predictors
+    formula = as.formula(paste0("ANTAT_3_A ~ ScreeLing_1_tot + stroke_size +", predictor)) # original model 
     data = dataset %>% drop_na(predictor)
     model <- generalTestBF(formula, data)
     bf <- bf_inclusion(model)
@@ -172,20 +172,20 @@ mod_coi_t3 <- lapply(PWASL_complete, function(dataset){ #across the 10 datasets 
   })
 })
 
-BFincl_coi_t3 <- data.frame() #get the mean and sd across the 10 datasets
+BFincl_coi_t3 <- data.frame() # get the mean and sd across the 10 datasets
   for (i in 1:length(predictors_oi)){ 
-    x <- data.frame(do.call(rbind, do.call(rbind, mod_coi_t3)[,i]), row.names = NULL) #ith element of each sublist
+    x <- data.frame(do.call(rbind, do.call(rbind, mod_coi_t3)[,i]), row.names = NULL) # ith element of each sublist
     y <- x %>% dplyr::group_by(Predictor) %>% summarise("BF inclusion" = qwraps2::mean_sd(BFincl, denote_sd = "paren"))
     BFincl_coi_t3 <- rbind(BFincl_coi_t3, y)
   }
 
 BFincl_coi_t3 <- BFincl_coi_t3 %>% filter(!(Predictor %in% c("ScreeLing_1_tot", "stroke_size"))) %>%
-  mutate(Predictor = unlist(var_label(PWASL[Predictor]))) #summary dataframe
+  mutate(Predictor = unlist(var_label(PWASL[Predictor]))) # summary dataframe
 
 ### Extra analysis 
 
-mod_HC_t3 <- lapply(PWASL_complete, function(dataset){ #across the 10 datasets and predictors, calculate BF incl
-  lapply(predictors_noi_t3, function(predictor){ #loop across predictors
+mod_HC_t3 <- lapply(PWASL_complete, function(dataset){ # across the 10 datasets and predictors, calculate BF incl
+  lapply(predictors_noi_t3, function(predictor){ # loop across predictors
     formula = as.formula(paste0("ANTAT_3_A ~ ScreeLing_1_tot + stroke_size + volume_LHC +", predictor)) #new model
     data = dataset %>% drop_na(predictor, volume_LHC)
     model <- generalTestBF(formula, data)
@@ -196,15 +196,15 @@ mod_HC_t3 <- lapply(PWASL_complete, function(dataset){ #across the 10 datasets a
   })
 })
 
-BFincl_HC_t3 <- data.frame() #get the mean and sd across the 10 datasets
+BFincl_HC_t3 <- data.frame() # get the mean and sd across the 10 datasets
 for (i in 1:length(predictors_noi_t3)){ 
-  x <- data.frame(do.call(rbind, do.call(rbind, mod_HC_t3)[,i]), row.names = NULL) #ith element of each sublist
+  x <- data.frame(do.call(rbind, do.call(rbind, mod_HC_t3)[,i]), row.names = NULL) # ith element of each sublist
   y <- x %>% dplyr::group_by(Predictor) %>% summarise("BF inclusion" = qwraps2::mean_sd(BFincl, denote_sd = "paren"))
   BFincl_HC_t3 <- rbind(BFincl_HC_t3, y)
 }
 
 BFincl_HC_t3 <- BFincl_HC_t3 %>% filter(!(Predictor %in% c("ScreeLing_1_tot", "stroke_size"))) %>%
-  mutate(Predictor = unlist(var_label(PWASL[Predictor]))) #summary dataframe
+  mutate(Predictor = unlist(var_label(PWASL[Predictor]))) # summary dataframe
 
 ### Final long-term model
 
